@@ -1,0 +1,22 @@
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+    #home div.shop {
+        margin-bottom: 8rem;
+    }
+    div#header-top dl.headerbox dd {
+        margin: 0.4rem 0.2rem;
+    }
+    html {
+        font-size: 1.8rem;
+    }
+}
+
+@media only screen and (min-width:414px) and (max-width:736px) {}
+
+#home div.shop div.banner {
+    /* margin-top:6rem; */
+}
+
+html {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
