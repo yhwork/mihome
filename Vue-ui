@@ -1,0 +1,825 @@
+# Vue-UI-项目使用说明书
+
+## 准备：
+
+### 脚手架 vue_cli
+
+优点：自动创建项目`目录结构`
+
+​      本地调试
+
+​      热加载
+
+​      代码部署
+
+#### 安装和配置
+
+```js
+//重置packge.json
+修改后
+再"npm install"命令行，安装
+```
+
+
+
+```js
+//全局环境下安装脚手架
+npm i vue-cli -g      //i  参数安全  g 全局安装
+```
+
+```js
+//初始化项目（创建项目目录；安装项目依赖的第三方模块）
+标准语法：vue init <template><app-name>
+//init 初始化
+//template 模块名称 webpack
+//app-name 项目名称 
+vue init webpack xz-app
+```
+
+```js
+//预先安装基础软件 
+node.js  //高版本node.js.8.1
+-项目名称 Project name (xz-app)   回车 
+     -安装 vue-router               Y
+     -安装 ES-lint    严格模检查工具 n
+     -以下安装检测工具             n
+```
+
+```js
+//安装成功启动项目
+     cd xz-app
+     npm run dev
+//浏览器直接访问
+    http://localhost:8080  //可以修改
+```
+
+```js
+//项目目录结构
+     xz-app-00
+       node_modules   // 保存第三方模板 
+       package.json    //  启动项目指令
+       src             // 项目中所有代码
+        -assets        //  静态图片
+        -components   // 项目自己开发组件保存在此处理
+        -lib            // 移动端组件  mui
+        main.js         // 入口文件
+        router.js       //  路由模块
+        App.vue        // 根组件
+```
+
+### 简单开发流程 
+
+```
+(1)main.js 加载使用模块;加载路由;加载ajax
+```
+
+```
+(2)在components 创建自定义组件
+
+        <template></template>
+
+        <script></script> 
+
+        <style><style>
+
+```
+
+```
+(3)在router.js   配置如何访问组件[访问路径]
+
+        -引入组件
+
+         import  组件对象名称 from "./components/Test.vue"
+
+        -配置组件访问 
+
+         {path:"/路径",component:组件对象名称}
+
+```
+
+### 脚手架安装其他模块
+
+#### 1.ajax请求
+
+```js
+axios  //新
+function getUserAccount(){
+  return axios.get('/user/12345');
+}
+function getUserPermissions(){
+  return axios.get('/user/12345/permissions');
+}
+axios.all([getUserAccount(),getUserPermissions()])
+  .then(axios.spread(function(acct,perms){
+    //当这两个请求都完成的时候会触发这个函数，两个参数分别代表返回的结果
+  }))
+
+作者：FunnySeeker
+链接：https://www.jianshu.com/p/df464b26ae58
+來源：简书
+简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。
+npm install axios --save
+
+vue-resource  //旧
+```
+
+安装：
+
+```js
+//(0)将vue-resource 安装脚手架
+	npm i vue-resource -D
+//(0)将vue-resource 安装脚手架
+    npm i vue-resource -D
+//(1)引入当前项目-main.js
+    import VueResource from "vue-resource"
+//(2)注册-main.js
+    Vue.use(VueResource)
+//(3)使用:当前vue实例对象添加属性 $http.get() .post()
+     this.$http.get(url).then(result=>{})
+```
+
+解决跨域
+
+-安装第三方组件 cors node.js/node_modules
+
+```js
+npm i cors
+```
+
+配置
+
+```js
+ //加载跨域访问模块
+      const cors = require("cors")
+ //     配置允许哪个程序哪个端口访问
+      app.use(cors({
+       origin:["http://127.0.0.1:3001","http://localhost:3001"],
+       credentials:true
+     }))
+```
+
+#### mint ui安装
+
+安装配置
+
+```js
+//(1)-下载配置使用组件
+npm i mint-ui -D 
+```
+
+使用 在main.js
+
+```js
+//按需引入
+import {Button} from "mint-ui"
+Vue.component(Button.name,Button);
+```
+
+全局引入
+
+```js
+//引入mint-ui组件  全局引入
+ import Mint from 'mint-ui';
+Vue.use(Mint);  //注册全局  mint
+```
+
+
+
+商城创建
+
+
+
+
+
+## 常见错误
+
+模块加载错误
+
+```js
+ ERROR  Failed to compile with 1 errors                                                                                                      13:21:17
+ error  in ../node_modules/mint-ui/lib/mint-ui.common.js
+```
+
+解决  重新引入
+
+运行`npm install --save vue`
+
+在vue中操作dom
+
+```js
+//钩子函数已经加载完   mounted
+<button ref="btn">获取ref</button>
+ 
+this.$refs.btn.style.backgroundColor="#ff0000"
+```
+
+mint-ui 
+
+```js
+//全局引入
+import Mint from 'mint-ui';
+Vue.use(Mint);
+
+//局部引入
+import { Cell, Checklist } from 'minu-ui';
+Vue.component(Cell.name, Cell);
+Vue.component(Checklist.name, Checklist);
+```
+
+
+
+1.swipe  
+
+```js
+1.轮播图是竖向的
+忘记引入样式文件了import "mint-ui/lib/style.css"
+
+2.轮播图不显示
+
+需要在swipe所在组件的style中设定swipe容器的宽高
+```
+
+vuex安装
+
+```
+安装 npm install vuex --save 
+```
+
+```
+引入 import Vuex from 'vuex'
+Vue.use(Vuex)
+```
+
+```
+导出一个 vuex.Store 实例
+
+{
+    state,      <!--状态-->
+    
+    getters,    <!-- 状态的计算属性 -->
+    
+    mutations,  <!-- 用于改变状态 -->
+    
+    actions,   <!-- 可包含异步操作的mutation -->
+}
+```
+
+```
+//传入  state
+export const store new Vuex.Store({
+    state:{
+        goodList:[]
+    }
+})
+```
+
+
+
+```js
+安装
+ npm i vuex  -D
+//创建 vuex 实例  对象
+  //1下载安装Vuex   npm i vuex  -D
+  //引入Vuex
+  import Vuex from 'vuex'
+  //注册  Vuex实例
+  Vue.use(Vuex);
+  //创建Vuex  实例对象
+  var store=new Vuex.Store({
+     //保存共享数据
+    state:{
+        //购物车商品的数量
+        count:0,
+    },    
+     //   操作共享数据
+    mutations:{   //存的是方法
+    
+        // 增加的函数
+        increment(state,i){ //修改共享数据第二个方法
+          state.count+=parseInt(i);
+        },  
+        substract(state,i){ //参数共享数据
+          state.count-= i;
+        }   
+    },  
+     //获取共享数据
+    getters:{
+      optcount(state){
+        return state.count;  //返回共享数据
+      }
+    }     
+  })
+//注册  Vuex实例对象
+// new Vue({
+//   router,
+//   render: h => h(App),
+//   store
+// }).$mount('#app')   
+//   //调用   {{$Store.getters.方法返回}}
+
+```
+
+
+
+设置请求路由路径
+
+```js
+//5: 设置请求的根路径 
+//Vue.http.options.root = "http://127.0.0.1/index/";
+```
+
+全局设置post请求
+
+```js
+//6:全局设置post 时候表示的数据组织格式为 application/x-www-form-urlencoded
+//Vue.http.options.emulateJSON = true;
+```
+
+过滤器
+
+```js
+//过滤器函数
+//Vue.filter('过滤器名',function(val)){return }
+```
+
+配置全局请求
+
+```js
+npm install vue-resource  //安装
+
+/*引入资源请求插件*/
+import VueResource from 'vue-resource';
+
+/*使用VueResource插件*/
+Vue.use(VueResource);
+
+/*设置请求*/
+Vue.http.options.root = ' http： //api.domain.com/v1'     //后面不带   /
+
+/*请求*/
+this.$http.get('index/dev')  //前面不带  /
+
+new Vue({
+  el: '#app',
+  router,
+  resource,//通过import引入，然后在这里调用
+  components: { App },
+  template: '<App/>'
+});
+
+
+```
+
+
+
+在  服务器加载完  再插入dom数据,避免报错
+
+```js
+1.v-text  
+2.添加虚拟数据
+```
+
+懒加载
+
+```js
+//引入
+import { Lazyload } from 'mint-ui';
+
+Vue.use(Lazyload)
+```
+
+```html
+<ul>
+  <li v-for="item in list">
+    <img v-lazy="item">
+  </li>
+</ul>
+```
+
+```js
+image[lazy=loading] {
+  width: 40px;
+  height: 300px;
+  margin: auto;
+}
+```
+
+组件间传值
+
+父组件向子组件传值
+
+```js
+
+```
+
+子组件向父组件传值
+
+```js
+
+```
+
+路由间传值
+
+```js
+
+```
+
+跨域在node.js中
+
+```js
+//设置跨域访问
+app.all('*', function(req, res, next) {
+    //允许的域名（ * 所有域）
+    res.header("Access-Control-Allow-Origin", "*"); 
+    //服务器支持的头信息
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    //允许的方法 
+    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+    res.header("X-Powered-By",' 3.2.1')
+    res.header("Content-Type", "application/json;charset=utf-8");
+    next();
+});
+
+```
+
+在vue中 设置代理可以跨域 
+
+```js
+//使用 vue cli 在目录config下 dev.env.js中加入
+module.exports = {
+dev: {
+    proxyTable: {
+      '/': {
+        target: 'http://localhost:8081',
+        changeOrigin: true
+      }
+    }
+  }
+}
+```
+
+直接引入cors
+
+```js
+//安装  
+npm install cors
+
+//在app.js中
+var cors = require('cors');
+app.use(cors());
+```
+
+
+
+
+
+
+
+node.js 需要重启服务才能生效。这是因为 Node.js 只有在第一次引用到某部份时才会去解析脚 本文件，以后都会直接访问内存，避免重复载入 
+
+```js
+//supervisor的安装
+npm -g install supervisor
+
+//supervisor必须安装到全局，如果你不安装到全局，错误命令会提示你安装到全局。
+
+//如果不想安装到默认的全局,也可以自己修改全局路径到当前路径
+npm config set prefix "路径"
+
+//启动服务
+supervisor app.js
+```
+
+
+
+promises
+
+https://www.cnblogs.com/sweeeper/p/8442613.html
+
+
+
+判断 点击事件
+
+```
+//1.通过  @click='ck($event)'
+ck(e){
+    e.target   //当前点击的元素
+}
+
+2.设置自定义属性
+data-a='item.id'  ref='txt' @click='ck($event)'
+ck(e){
+    this.$refs.dataset.a   //自定义属性的值
+}
+```
+
+vue 中
+
+```js
+overflow-x:scroll    //滚动条
+父元素 占100%   用   100vh
+
+
+```
+
+### vue 图片 懒加载
+
+安装
+
+```
+ npm i vue-lazyload -D
+```
+
+引入
+
+```
+import VueLazyload from 'vue-lazyload'  //引入这个懒加载插件
+Vue.use(VueLazyload)
+
+// 或者添加VueLazyload 选项  监听
+Vue.use(VueLazyload, {
+  preLoad: 1.3,
+  error: 'dist/error.png',
+  loading: 'dist/loading.gif',
+  attempt: 1，
+  
+  // the default is ['scroll', 'wheel', 'mousewheel', 'resize', 'animationend', 'transitionend']
+  listenEvents: [ 'scroll' ]    监听
+})
+
+new Vue({
+  el: 'body',
+  components: {
+    App
+  }
+})
+```
+
+在img中设置
+
+```
+<img :src='' ></img>  改为
+
+
+<img v-lazy=''>实现懒加载
+```
+
+分类设置
+
+获取到顶部的距离  添加 scroll的元素
+
+获取到顶部的距离 this.$refs.top.offsetTop
+
+获取滚动的距离
+
+this.$refs.scroll=function(e){
+
+​	this.scrollTop
+
+}
+
+如要为其赋值需要
+
+this.$nextTick(){     设置scroll的元素
+
+​	this.$refs.scroll=赋值
+
+}
+
+ vue    ajax请求
+
+```
+//参数
+let params ={
+    params: {
+        username: 'zhangSan',
+        pwd: '123456'
+    }
+}
+```
+
+
+
+```
+//get 请求
+this.$http.get(url,params).then((res)=>{
+    console.log(res.data)
+}),(err)=>{
+    console.log(err)
+}
+```
+
+```
+//post  请求
+this.$http.post(url,params,{emulateJSON:true}).then((res)=>{
+    console.log(res)
+}),(err)=>{
+    
+}
+```
+
+```
+//json 请求
+let JSONparams ={
+    params: {
+        username: 'zhangSan',
+        pwd: '123456'
+    },
+    jsonp: 'callback' // 设置回调函数的参数的一个名字，默认是话是callback,
+}
+ this.$http.jsonp(url, JSONparams).then( (res) => {
+    console.log(res);
+}, (err) => {
+    console.log(err);
+})
+```
+
+## phonegap---混编
+
+移动端技术[vue,小程序，。。。。]
+
+以上技术不能调用移动端设备底层硬件，加速传感器，录音，视频
+
+
+
+实现对底层硬件调用
+
+方式1：（苹果硬件调用 Object-C）
+
+​		 （安卓硬件调用 java）
+
+方式2：类似通用平台软件 phonegap
+
+​		js->phonegap-->硬件
+
+#### 概念：
+
+```
+phonegap 是一种使用前端技术（js）创建移动端平台 
+```
+
+创建环境
+
+1.phonegap 服务器
+
+```
+1.上传程序模板
+2.点击phonegap 启动服务器     
+	点击+ 查找服务器模板位置 
+		1.创建新的
+		2.打开已存在的
+3.启动服务器
+	默认：http://127.16.10.1:3000
+注意：状态条为绿色启动成功
+```
+
+2.手机模拟器
+
+```
+1.夜神模拟器
+
+2.上传Android app
+
+3.点击app 连接 phonegap
+
+```
+
+3.phonegap --编代码
+
+```
+//设备
+device  当前平台。设备版本
+device.platofrm  当前平台
+device.uuid 设备编号
+device.version 设备版本
+```
+
+```
+//相机设备
+navigator.camera.getPicture(fn1,fn2,{quality:50})
+fn1:拍照成功  url 相片地址
+fn2:拍照失败  
+quality：50 延迟时间
+```
+
+```
+//蜂鸣震动
+navigator.notification.alert();  						 提示框
+navigator.notifiction.confirm('提示内容‘function(e){});   确认框
+navigator.motification.beep(次数)						   蜂鸣器
+navigator.notification.vibrate(时长毫秒)				  震动
+```
+
+```
+//录音
+navigator.device.capture.captureAudio(fn,fn,{limit:2})
+fn1  成功录音结束
+fn2  
+```
+
+微信小程序---订阅号
+
+订阅号测试账号开发->问答工具->开发者中心->在线接口测试账号
+
+1.创建服务器并且合法域名[内网穿透工具]
+
+```
+cd: 切换路径
+ngrok.exe  http 3000     可以用8个小时
+
+ http://127.0.0.1:4040
+ http://c368da43.ngrok.io
+  https://c368da43.ngrok.io -> localhost:3000
+```
+
+2.下载第三方微信聊天模块
+
+```
+
+```
+
+3.使用聊天模块调用聊天方法完成聊天操作
+
+```
+let config={
+    appid:'wx67bb5fb2f84d6d95',
+    token:'weixin'
+}
+app.post('/',wechat(config,(req,res)=>{
+	req.weiixn.Content  服务器发送文字
+	res.replay(返回文字)
+}))
+app.get('/',wechat(config,(req,res)=>{
+	req.weiixn.Content  服务器发送文字
+	res.replay(返回文字)
+}))
+```
+
+
+
+4.在测试账户中
+
+添加域名   主机
+
+5.邀请其他用户测试
+
+
+
+工具下载：
+
+```
+http://ngrok.com
+第三方模块： npm i wechat
+```
+
+常见错无
+
+```
+在第四步之前启动服务器
+测试连接发送给node.js get请求
+app.get('/') 测试聊天
+app.post('/')  聊天
+
+```
+
+
+
+
+
+服务器配置session
+
+```
+安装 cookie-session --save
+
+npm install express-session --save
+npm install cookie-parser --save
+```
+
+使用
+
+```
+var cookieParser = require('cookie-parser')
+var session = require('express-session')
+ 
+app.use(cookieParser())
+app.use(session({
+    secret: 'imooc',
+    name:'11',
+    cookie:{maxAge:60000},
+    resave:false,
+    saveUninitialized: true
+}))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
